@@ -1,0 +1,68 @@
+package Regex.Html;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.chrome.ChromeDriver;
+import java.sql.*;
+
+public class MailMsgAutomate {
+
+	public static void main(String[] args)  {
+		// TODO Auto-generated method stub
+       int id = 1;
+       
+	   String username=null;
+       String password=null;
+       String sendemail=null;
+       String subject=null;
+       String msg=null;
+       try { 
+    	Class.forName("com.mysql.jdbc.Driver");
+        Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/mail","root","root");
+        Statement stmt=con.createStatement();
+        String sql1="Select * from info where id="+id;
+        ResultSet rs= stmt.executeQuery(sql1);
+        while(rs.next())
+        {
+        	username=rs.getString("username");
+        	password=rs.getString("passwordd");
+        	sendemail=rs.getString("send_email");
+        	subject=rs.getString("sub");
+        	msg=rs.getString("msg");
+        }
+        
+    	System.setProperty("webdriver.chrome.driver","C:\\Users\\KIIT\\Downloads\\chromedriver.exe");
+        ChromeDriver driver = new ChromeDriver();
+        driver.get("https://accounts.google.com/v3/signin/identifier?dsh=S1224913312%3A1667030221531129&continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&rip=1&sacu=1&service=mail&flowName=GlifWebSignIn&flowEntry=ServiceLogin&ifkv=AQDHYWr23nlwfRXMpKsZkcSSpsKoEkLNxMPQW6_jo40C-Pi-Ss3pPrHxBACgwo3PTj94wMH5-rqO2A");
+        driver.findElement(By.id("identifierId")).sendKeys(username);
+        Thread.sleep(1000);
+        driver.findElement(By.xpath("//*[@id=\"identifierNext\"]/div/button")).click();
+        Thread.sleep(5000);
+        driver.findElement(By.xpath("//*[@id=\"password\"]/div[1]/div/div[1]/input")).sendKeys(password);
+        Thread.sleep(1000);
+        driver.findElement(By.xpath("//*[@id=\"passwordNext\"]/div/button")).click();
+        Thread.sleep(8000);
+        driver.findElement(By.xpath("/html/body/div[7]/div[3]/div/div[2]/div[1]/div[1]/div/div")).click();
+        Thread.sleep(5000);
+        driver.findElement(By.xpath("//input[starts-with(@role,'combobox')]")).sendKeys(sendemail);
+        Thread.sleep(5000);
+        driver.findElement(By.name("subjectbox")).sendKeys(subject);
+        Thread.sleep(5000);
+        driver.findElement(By.xpath("//div[starts-with(@role,'textbox')]")).sendKeys(msg);
+        Thread.sleep(5000);
+        driver.findElement(By.xpath("//div[starts-with(@command,'docs')]")).click();
+        Thread.sleep(5000);
+        driver.findElement(By.xpath("//input[starts-with(@aria-label,'Search terms')]")).sendKeys("ANS_2_CD");
+        Thread.sleep(5000);
+        driver.findElement(By.xpath("//div[starts-with(@data-tooltip,'Search')]")).click();
+        Thread.sleep(5000);
+        
+        driver.findElement(By.xpath("//div[starts-with(@data-tooltip,'Send')]")).click();
+        Thread.sleep(5000);
+        driver.close();
+       }catch(Exception e)
+       {
+    	   System.out.println(e);
+       }
+	}
+
+}
